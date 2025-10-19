@@ -5,6 +5,7 @@ import com.rgr.transferencias.model.Transferencia;
 import com.rgr.transferencias.repository.TransferenciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -55,6 +56,25 @@ public class TransferenciaService {
         transferencia.setTaxa(taxa);
 
         return transferenciaRepository.save(transferencia);
+    }
+
+    /**
+     * Agenda uma nova transferência (equivalente ao criarTransferencia).
+     */
+    public Transferencia agendarTransferencia(TransferenciaDTO dto) {
+        return criarTransferencia(dto);
+    }
+
+    /**
+     * Deleta uma transferência pelo ID, caso exista.
+     */
+    public boolean deletarTransferencia(Long id) {
+        Optional<Transferencia> transferencia = transferenciaRepository.findById(id);
+        if (transferencia.isPresent()) {
+            transferenciaRepository.delete(transferencia.get());
+            return true;
+        }
+        return false;
     }
 
     /**

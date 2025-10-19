@@ -5,8 +5,12 @@ import org.springframework.stereotype.Repository;
 import com.rgr.transferencias.model.Transferencia;
 
 /**
- * Repositório responsável pelo acesso e persistência de dados da entidade Transferencia.
- * Estende JpaRepository para herdar métodos CRUD (save, findAll, findById, delete, etc).
+ * Repositório responsável por acessar os dados de Transferencia no banco.
+ * Usa o JpaRepository, que já oferece métodos prontos como:
+ * - findAll()
+ * - findById()
+ * - save()
+ * - deleteById()
  *
  * @author Jedson
  */

@@ -83,19 +83,30 @@ public class TransferenciaService {
     private BigDecimal calcularTaxa(BigDecimal valor, LocalDate dataAgendamento, LocalDate dataTransferencia) {
         long dias = ChronoUnit.DAYS.between(dataAgendamento, dataTransferencia);
 
-        if (dias == 0) {
-            return valor.multiply(new BigDecimal("0.03")).add(new BigDecimal("3.00"));
-        } else if (dias <= 10) {
-            return valor.multiply(new BigDecimal("0.12"));
-        } else if (dias <= 20) {
-            return valor.multiply(new BigDecimal("0.08"));
-        } else if (dias <= 30) {
-            return valor.multiply(new BigDecimal("0.06"));
-        } else if (dias <= 40) {
-            return valor.multiply(new BigDecimal("0.04"));
-        } else {
-            return valor.multiply(new BigDecimal("0.02"));
+        if (dias < 0) {
+            throw new IllegalArgumentException("A data de transferência não pode ser anterior à data de agendamento.");
         }
+
+        BigDecimal taxa;
+
+        if (dias == 0) {
+            taxa = valor.multiply(new BigDecimal("0.025")).add(new BigDecimal("3.00")); // 2,5% + R$3,00
+        } else if (dias <= 10) {
+            taxa = valor.multiply(new BigDecimal("0.00")).add(new BigDecimal("12.00")); // R$12,00 fixo
+        } else if (dias <= 20) {
+            taxa = valor.multiply(new BigDecimal("0.082"));
+        } else if (dias <= 30) {
+            taxa = valor.multiply(new BigDecimal("0.069"));
+        } else if (dias <= 40) {
+            taxa = valor.multiply(new BigDecimal("0.047"));
+        } else if (dias <= 50) {
+            taxa = valor.multiply(new BigDecimal("0.017"));
+        } else {
+            // Caso não haja taxa aplicável
+            throw new IllegalArgumentException("Não há taxa aplicável para este intervalo de dias. Operação não permitida.");
+        }
+
+        return taxa.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     /**

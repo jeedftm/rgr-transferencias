@@ -1,39 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Transferencia } from '../models/transferencia.model';
+import { TransferenciaDTO } from '../models/transferencia-dto.model';
 
-export interface TransferenciaService {
-  id?: number;
-  contaOrigem: string;
-  contaDestino: string;
-  valor: number;
-  taxa?: number;
-  dataAgendamento: string;
-  dataTransferencia: string;
-}
-
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class TransferenciaService {
-
-  private apiUrl = 'http://localhost:8080/api/transferencias';
+  private readonly api = 'http://localhost:8080/api/transferencias';
 
   constructor(private http: HttpClient) {}
 
-  listarTodas(): Observable<TransferenciaService[]> {
-    return this.http.get<TransferenciaService[]>(this.apiUrl);
+  listar(): Observable<Transferencia[]> {
+    return this.http.get<Transferencia[]>(this.api);
   }
 
-  buscarPorId(id: number): Observable<TransferenciaService> {
-    return this.http.get<TransferenciaService>(`${this.apiUrl}/${id}`);
+  agendar(dto: TransferenciaDTO): Observable<Transferencia> {
+    return this.http.post<Transferencia>(this.api, dto);
   }
 
-  agendar(transferencia: TransferenciaService): Observable<TransferenciaService> {
-    return this.http.post<TransferenciaService>(this.apiUrl, transferencia);
+  buscarPorId(id: number): Observable<Transferencia> {
+    return this.http.get<Transferencia>(`${this.api}/${id}`);
   }
 
   deletar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.api}/${id}`);
   }
 }

@@ -1,0 +1,19 @@
+<!-- src/app/components/transferencias/transferencias.component.html -->
+<h2>Transferências</h2>
+
+<form (ngSubmit)="agendarTransferencia()">
+  <input [(ngModel)]="novaTransferencia.contaOrigem" name="contaOrigem" placeholder="Conta Origem">
+  <input [(ngModel)]="novaTransferencia.contaDestino" name="contaDestino" placeholder="Conta Destino">
+  <input [(ngModel)]="novaTransferencia.valor" name="valor" type="number" placeholder="Valor">
+  <input [(ngModel)]="novaTransferencia.dataAgendamento" name="dataAgendamento" type="date">
+  <input [(ngModel)]="novaTransferencia.dataTransferencia" name="dataTransferencia" type="date">
+  <button type="submit">Agendar</button>
+</form>
+
+<ul>
+  <li *ngFor="let t of transferencias">
+    {{ t.id }} - {{ t.contaOrigem }} → {{ t.contaDestino }}
+    — R$ {{ t.valor }} (taxa: {{ t.taxa}})
+    <button (click)="deletar(t.id)">Excluir</button>
+  </li>
+</ul>

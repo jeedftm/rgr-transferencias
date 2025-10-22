@@ -1,19 +1,79 @@
-<!-- src/app/components/transferencias/transferencias.component.html -->
-<h2>Transferências</h2>
+<div class="container">
+  <h2>💸 Transferências</h2>
 
-<form (ngSubmit)="agendarTransferencia()">
-  <input [(ngModel)]="novaTransferencia.contaOrigem" name="contaOrigem" placeholder="Conta Origem">
-  <input [(ngModel)]="novaTransferencia.contaDestino" name="contaDestino" placeholder="Conta Destino">
-  <input [(ngModel)]="novaTransferencia.valor" name="valor" type="number" placeholder="Valor">
-  <input [(ngModel)]="novaTransferencia.dataAgendamento" name="dataAgendamento" type="date">
-  <input [(ngModel)]="novaTransferencia.dataTransferencia" name="dataTransferencia" type="date">
-  <button type="submit">Agendar</button>
-</form>
+  <form class="transfer-form" (ngSubmit)="agendarTransferencia()">
+    <mat-form-field appearance="outline">
+      <mat-label>Conta Origem</mat-label>
+      <input matInput [(ngModel)]="novaTransferencia.contaOrigem" name="contaOrigem" required />
+    </mat-form-field>
 
-<ul>
-  <li *ngFor="let t of transferencias">
-    {{ t.id }} - {{ t.contaOrigem }} → {{ t.contaDestino }}
-    — R$ {{ t.valor }} (taxa: {{ t.taxa}})
-    <button (click)="deletar(t.id)">Excluir</button>
-  </li>
-</ul>
+    <mat-form-field appearance="outline">
+      <mat-label>Conta Destino</mat-label>
+      <input matInput [(ngModel)]="novaTransferencia.contaDestino" name="contaDestino" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Valor</mat-label>
+      <input matInput type="number" [(ngModel)]="novaTransferencia.valor" name="valor" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data de Agendamento</mat-label>
+      <input matInput [matDatepicker]="picker1" [(ngModel)]="novaTransferencia.dataAgendamento" name="dataAgendamento" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data da Transferência</mat-label>
+      <input matInput [matDatepicker]="picker2" [(ngModel)]="novaTransferencia.dataTransferencia" name="dataTransferencia" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">
+      Agendar
+    </button>
+  </form>
+
+  <mat-divider></mat-divider>
+
+  <table mat-table [dataSource]="transferencias" class="mat-elevation-z8">
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let t; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="contaOrigem">
+      <th mat-header-cell *matHeaderCellDef>Conta Origem</th>
+      <td mat-cell *matCellDef="let t">{{ t.contaOrigem }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="contaDestino">
+      <th mat-header-cell *matHeaderCellDef>Conta Destino</th>
+      <td mat-cell *matCellDef="let t">{{ t.contaDestino }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="valor">
+      <th mat-header-cell *matHeaderCellDef>Valor</th>
+      <td mat-cell *matCellDef="let t">R$ {{ t.valor }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="taxa">
+      <th mat-header-cell *matHeaderCellDef>Taxa</th>
+      <td mat-cell *matCellDef="let t">R$ {{ t.taxa }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell *matHeaderCellDef>Ações</th>
+      <td mat-cell *matCellDef="let t">
+        <button mat-icon-button color="warn" (click)="deletar(t)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['index', 'contaOrigem', 'contaDestino', 'valor', 'taxa', 'acoes']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['index', 'contaOrigem', 'contaDestino', 'valor', 'taxa', 'acoes']"></tr>
+  </table>
+</div>

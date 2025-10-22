@@ -14,7 +14,7 @@ Service: Contém as regras de negócio (validações e cálculo da taxa).
 
 Repository: Camada de persistência, implementada com Spring Data JPA.
 
-Model: Representa a entidade Transferencia.
+Model: Representa a entidade TransferenciaService.
 
 DTO: Transfere dados entre a API e o domínio (Data Transfer Object).
 
